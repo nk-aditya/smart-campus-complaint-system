@@ -148,9 +148,8 @@ const assignWorker = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      message: error.message
+      message: "Server Error"
     });
   }
 };
@@ -180,11 +179,54 @@ const getWorkerComplaints = async (req, res) => {
   }
 };
 
+const completeComplaint = async (req, res) => {
+  try {
+    const { remark } = req.body;
+
+    if (req.user.role !== "worker") {
+      return res.status(403).json({
+        message: "Only worker can complete complaint"
+      });
+    }
+
+    const complaint = await Complaint.findById(req.params.id);
+
+    if (!complaint) {
+      return res.status(404).json({
+        message: "Complaint not found"
+      });
+    }
+
+    // only assigned worker can complete
+    if (complaint.assignedTo.toString() !== req.user.id) {
+      return res.status(403).json({
+        message: "Not your assigned complaint"
+      });
+    }
+
+    complaint.status = "Resolved";
+    complaint.remark = remark || "Work completed";
+
+    await complaint.save();
+
+    res.status(200).json({
+      message: "Complaint completed successfully",
+      complaint
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
 module.exports = {
   createComplaint,
   getMyComplaints,
   getAllComplaints,
   updateComplaintStatus,
   assignWorker,
-  getWorkerComplaints
+  getWorkerComplaints,
+  completeComplaint
 };

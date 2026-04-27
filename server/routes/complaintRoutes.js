@@ -7,7 +7,8 @@ const {
   getAllComplaints,
   updateComplaintStatus,
   assignWorker,
-  getWorkerComplaints
+  getWorkerComplaints,
+  completeComplaint
 } = require("../controllers/complaintController");
 
 const auth = require("../middleware/auth");
@@ -18,5 +19,6 @@ router.get("/all", auth, getAllComplaints);
 router.put("/assign/:id", auth, assignWorker);
 router.put("/status/:id", auth, updateComplaintStatus);
 router.get("/worker", auth, getWorkerComplaints);
+router.put("/complete/:id", auth, completeComplaint);
 
 module.exports = router;

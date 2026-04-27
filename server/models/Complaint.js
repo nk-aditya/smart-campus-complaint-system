@@ -24,6 +24,11 @@ const complaintSchema = new mongoose.Schema(
     default: "Pending"
   },
 
+  remark: {
+   type: String,
+   default: ""
+  },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
