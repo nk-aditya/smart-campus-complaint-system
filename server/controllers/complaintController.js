@@ -47,7 +47,34 @@ const getMyComplaints = async (req, res) => {
   }
 };
 
+const getAllComplaints = async (req, res) => {
+  try {
+
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied"
+      });
+    }
+
+    const complaints = await Complaint.find()
+      .populate("createdBy", "name email role")
+      .populate("assignedTo", "name email role")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      count: complaints.length,
+      complaints
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
 module.exports = {
   createComplaint,
-  getMyComplaints
+  getMyComplaints,
+  getAllComplaints
 };
