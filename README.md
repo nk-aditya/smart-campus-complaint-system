@@ -171,9 +171,9 @@ npm start
 ---
 
 ## Author
-- Aditya Nayak
+ Aditya Nayak
 
 ---
 
 ## License
-- MIT License
+ MIT License
