@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Complaint = require("../models/Complaint");
 
 const createComplaint = async (req, res) => {
@@ -110,9 +111,54 @@ const updateComplaintStatus = async (req, res) => {
   }
 };
 
+const assignWorker = async (req, res) => {
+  try {
+    const { workerId } = req.body;
+
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Only admin can assign workers"
+      });
+    }
+
+    const complaint = await Complaint.findById(req.params.id);
+
+    if (!complaint) {
+      return res.status(404).json({
+        message: "Complaint not found"
+      });
+    }
+
+    const worker = await User.findById(workerId);
+
+    if (!worker || worker.role !== "worker") {
+      return res.status(400).json({
+        message: "Valid worker not found"
+      });
+    }
+
+    complaint.assignedTo = workerId;
+    complaint.status = "Assigned";
+
+    await complaint.save();
+
+    res.status(200).json({
+      message: "Worker assigned successfully",
+      complaint
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
 module.exports = {
   createComplaint,
   getMyComplaints,
   getAllComplaints,
-  updateComplaintStatus
+  updateComplaintStatus,
+  assignWorker
 };
