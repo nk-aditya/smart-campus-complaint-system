@@ -155,10 +155,36 @@ const assignWorker = async (req, res) => {
   }
 };
 
+const getWorkerComplaints = async (req, res) => {
+  try {
+    // only worker allowed
+    if (req.user.role !== "worker") {
+      return res.status(403).json({
+        message: "Access denied"
+      });
+    }
+
+    const complaints = await Complaint.find({
+      assignedTo: req.user.id
+    }).populate("createdBy", "name email");
+
+    res.status(200).json({
+      count: complaints.length,
+      complaints
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
 module.exports = {
   createComplaint,
   getMyComplaints,
   getAllComplaints,
   updateComplaintStatus,
-  assignWorker
+  assignWorker,
+  getWorkerComplaints
 };
