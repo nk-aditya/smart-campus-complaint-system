@@ -29,4 +29,25 @@ const createComplaint = async (req, res) => {
   }
 };
 
-module.exports = { createComplaint };
+const getMyComplaints = async (req, res) => {
+  try {
+    const complaints = await Complaint.find({
+      createdBy: req.user.id
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      count: complaints.length,
+      complaints
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error"
+    });
+  }
+};
+
+module.exports = {
+  createComplaint,
+  getMyComplaints
+};
