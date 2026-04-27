@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authMiddleware = require("./middleware/auth");
+const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
 
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/complaints", complaintRoutes);
 
