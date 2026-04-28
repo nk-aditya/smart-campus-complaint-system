@@ -1,4 +1,14 @@
+import Navbar from "../components/Navbar";
+
 function WorkerDashboard() {
-  return <h1>Worker Dashboard</h1>;
+  return (
+    <>
+      <Navbar />
+      <h1 style={{ textAlign: "center", marginTop: "40px", color:"white" }}>
+        Worker Dashboard
+      </h1>
+    </>
+  );
 }
+
 export default WorkerDashboard;
