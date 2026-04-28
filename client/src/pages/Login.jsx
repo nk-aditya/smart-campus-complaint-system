@@ -19,8 +19,16 @@ function Login() {
     localStorage.setItem("name", res.data.user.name);
 
     alert("Login Successful");
-
-    console.log(res.data);
+    
+    const role = res.data.user.role;
+    
+    if (role === "student") {
+        window.location.href = "/student";
+    } else if (role === "admin") {
+        window.location.href = "/admin";
+    } else if (role === "worker") {
+        window.location.href = "/worker";
+    }
 
   } catch (error) {
     alert("Login Failed");
