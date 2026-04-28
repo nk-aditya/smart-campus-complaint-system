@@ -1,9 +1,7 @@
+import Login from "./pages/Login";
+
 function App() {
-  return (
-    <div>
-      <h1>Smart Campus Complaint System</h1>
-    </div>
-  );
+  return <Login />;
 }
 
 export default App;
