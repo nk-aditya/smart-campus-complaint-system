@@ -6,6 +6,7 @@ function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [selectedWorkers, setSelectedWorkers] = useState({});
+  const [editingAssign, setEditingAssign] = useState({});
 
   const token = localStorage.getItem("token");
 
@@ -111,7 +112,15 @@ function AdminDashboard() {
               <div>
                 <select
                   style={styles.select}
-                  disabled={item.status === "Resolved"}
+                  disabled={
+                    item.status === "Resolved" ||
+                    (
+                      (item.status === "Assigned" ||
+                       item.status === "In Progress"
+                      ) &&
+                      !editingAssign[item._id]
+                    )
+                  }
                   value={selectedWorkers[item._id] || ""}
                   onFocus={(e) =>
                     (e.target.style.border = "1px solid #2563eb")
@@ -139,14 +148,47 @@ function AdminDashboard() {
               {/* Action Column */}
               <div>
                 {item.status === "Resolved" ? (
-                  <span style={styles.donebadge}>Completed</span>
-                ) : (
-                  <button 
+                  <span style={styles.doneBadge}>Completed</span>
+
+                ) : item.status === "Pending" ? (
+
+                  <button
                     style={styles.btn}
                     onClick={() => handleAssign(item._id)}
                   >
                     Assign
                   </button>
+                
+                ) : editingAssign[item._id] ? (
+
+                  <button
+                    style={styles.btn}
+                    onClick={() => {
+                      handleAssign(item._id);
+                
+                      setEditingAssign({
+                        ...editingAssign,
+                        [item._id]: false,
+                      });
+                    }}
+                  >
+                    Save
+                  </button>
+                
+                ) : (
+
+                  <button
+                    style={styles.orangeBtn}
+                    onClick={() =>
+                      setEditingAssign({
+                        ...editingAssign,
+                        [item._id]: true,
+                      })
+                    }
+                  >
+                    Reassign
+                  </button>
+                
                 )}
               </div>
             </div>
@@ -215,6 +257,15 @@ const styles = {
     color: "#22c55e",
     fontWeight: "bold",
     fontSize: "16px",
+  },
+  orangeBtn: {
+    padding: "10px 18px",
+    backgroundColor: "#e49100",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "600",
   },
 };
 
