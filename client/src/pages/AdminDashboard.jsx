@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
   const [workers, setWorkers] = useState([]);
+  const [selectedWorkers, setSelectedWorkers] = useState({});
 
   const token = localStorage.getItem("token");
 
@@ -55,6 +56,7 @@ function AdminDashboard() {
             <div>Title</div>
             <div>Category</div>
             <div>Status</div>
+            <div>Worker</div>
             <div>Action</div>
           </div>
 
@@ -77,9 +79,40 @@ function AdminDashboard() {
                 }
               >{item.status}
               </div>
-              <button style={styles.btn}>
-                Assign
-              </button>
+              {/* Worker Column */}
+              <div>
+                <select
+                  style={styles.select}
+                  value={selectedWorkers[item._id] || ""}
+                  onFocus={(e) =>
+                    (e.target.style.border = "1px solid #2563eb")
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.border = "1px solid #334155")
+                  }
+                  onChange={(e) =>
+                    setSelectedWorkers({
+                      ...selectedWorkers,
+                      [item._id]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">Select Worker</option>
+          
+                  {workers.map((worker) => (
+                    <option key={worker._id} value={worker._id}>
+                      {worker.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Action Column */}
+              <div>
+                <button style={styles.btn}>
+                  Assign
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -106,7 +139,7 @@ const styles = {
 
   header: {
     display: "grid",
-    gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1.3fr 1fr 1fr 1.3fr 0.8fr",
     backgroundColor: "#1d4ed8",
     padding: "15px",
     fontWeight: "bold",
@@ -114,18 +147,33 @@ const styles = {
 
   row: {
     display: "grid",
-    gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1.3fr 1fr 1fr 1.3fr 0.8fr",
     backgroundColor: "#1e293b",
     padding: "15px",
     borderBottom: "1px solid #334155",
   },
   btn: {
-    padding: "8px 14px",
+    padding: "10px 18px",
+    margin:"6px 20px",
     backgroundColor: "#2563eb",
     color: "white",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "8px",
     cursor: "pointer",
+    fontWeight: "600",
+    transition: "0.3s",
+  },
+  select: {
+    padding: "10px 14px",
+    borderRadius: "8px",
+    border: "1px solid #334155",
+    backgroundColor: "#1f2c3f",
+    color: "white",
+    fontSize: "15px",
+    outline: "none",
+    cursor: "pointer",
+    minWidth: "170px",
+    transition: "0.3s",
   },
 };
 
