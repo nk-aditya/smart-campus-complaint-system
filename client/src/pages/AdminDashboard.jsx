@@ -41,6 +41,7 @@ function AdminDashboard() {
             <div>Title</div>
             <div>Category</div>
             <div>Status</div>
+            <div>Action</div>
           </div>
 
           {complaints.map((item) => (
@@ -62,6 +63,9 @@ function AdminDashboard() {
                 }
               >{item.status}
               </div>
+              <button style={styles.btn}>
+                Assign
+              </button>
             </div>
           ))}
         </div>
@@ -88,7 +92,7 @@ const styles = {
 
   header: {
     display: "grid",
-    gridTemplateColumns: "1fr 2fr 1fr 1fr",
+    gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
     backgroundColor: "#1d4ed8",
     padding: "15px",
     fontWeight: "bold",
@@ -96,10 +100,18 @@ const styles = {
 
   row: {
     display: "grid",
-    gridTemplateColumns: "1fr 2fr 1fr 1fr",
+    gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
     backgroundColor: "#1e293b",
     padding: "15px",
     borderBottom: "1px solid #334155",
+  },
+  btn: {
+    padding: "8px 14px",
+    backgroundColor: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
   },
 };
 
