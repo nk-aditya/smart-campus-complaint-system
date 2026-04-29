@@ -94,4 +94,22 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+//Get Workers
+const getWorkers = async (req, res) => {
+  try {
+    const workers = await User.find(
+      { role: "worker" },
+      "name email role"
+    );
+
+    res.status(200).json({
+      workers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch workers",
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, getWorkers };

@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 
 function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
+  const [workers, setWorkers] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -24,8 +25,21 @@ function AdminDashboard() {
     }
   };
 
+  const fetchWorkers = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/workers"
+      );
+  
+      setWorkers(res.data.workers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchComplaints();
+    fetchWorkers();
   }, []);
 
   return (
