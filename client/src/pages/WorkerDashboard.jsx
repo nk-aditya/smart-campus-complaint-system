@@ -27,6 +27,12 @@ function WorkerDashboard() {
 
   useEffect(() => {
     fetchComplaints();
+
+    const interval = setInterval(() => {
+      fetchComplaints();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const startWork = async (id) => {

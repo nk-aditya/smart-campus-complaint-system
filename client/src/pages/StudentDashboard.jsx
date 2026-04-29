@@ -30,6 +30,12 @@ function StudentDashboard() {
 
   useEffect(() => {
     fetchComplaints();
+
+    const interval = setInterval(() => {
+      fetchComplaints();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -100,42 +106,123 @@ function StudentDashboard() {
           </button>
         </form>
 
-        <h2 style={{ marginTop: "50px" }}>My Complaints</h2>
+        {/* Prepare Data */}
+        {(() => {
+          const unresolved = complaints.filter(
+            (item) => item.status !== "Resolved"
+          );
+        
+          const activeComplaint = unresolved[0];
+        
+          const ongoingComplaints = unresolved.slice(1);
+        
+          const resolvedComplaints = complaints.filter(
+            (item) => item.status === "Resolved"
+          );
 
-        {/* Active Complaint */}
-        <div style={styles.list}>
-          {complaints
-          .filter((item) => item.status !== "Resolved")
-          .slice(0, 1)
-          .map((item) => (
-            <div key={item._id} style={styles.activeCard}>
-              <h3 style={{ color: "#fca5a5" }}>Active Complaint</h3>
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-              <p><b>Category:</b> {item.category}</p>
-              <p><b>Status:</b> {item.status}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* History */}
-        <h2 style={{ marginTop: "40px" }}>Complaint History</h2>
-
-        <div style={styles.list}>
-          {complaints
-            .filter((item) => item.status === "Resolved")
-            .map((item) => (
-            <div key={item._id} style={styles.card}>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <p><b>Status:</b> {item.status}</p>
-              <p><b>Remark:</b> {item.remark}</p>
-              <small>
-                {new Date(item.createdAt).toLocaleString()}
-              </small>
-            </div>
-          ))}
-        </div>
+          const getStatusColor = (status) => {
+            if (status === "Pending") return "orange";
+            if (status === "Assigned") return "#3b82f6";
+            if (status === "In Progress") return "#a855f7";
+            if (status === "Resolved") return "#22c55e";
+            return "white";
+          };
+        
+          return (
+            <>
+              {/* Active Complaint */}
+              {activeComplaint && (
+                <>
+                  <h2 style={{ marginTop: "40px" }}>
+                    Active Complaint
+                  </h2>
+        
+                  <div style={styles.activeCard}>
+                    <h3>{activeComplaint.title}</h3>
+                    <p>{activeComplaint.description}</p>
+                    <p>
+                      <b>Status:</b>{" "}
+                      <span
+                        style={{
+                          color: getStatusColor(activeComplaint.status),
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {activeComplaint.status}
+                      </span>
+                    </p>
+                    <p>
+                      <b>Category:</b> {activeComplaint.category}
+                    </p>
+                  </div>
+                </>
+              )}
+        
+              {/* Ongoing Complaints */}
+              {ongoingComplaints.length > 0 && (
+                <>
+                  <h2 style={{ marginTop: "40px" }}>
+                    Ongoing Complaints
+                  </h2>
+        
+                  <div style={styles.list}>
+                    {ongoingComplaints.map((item) => (
+                      <div key={item._id} style={styles.card}>
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                        <p>
+                          <b>Status:</b>{" "}
+                          <span
+                            style={{
+                              color: getStatusColor(item.status),
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {item.status}
+                          </span>
+                        </p>
+                        <p>
+                          <b>Category:</b> {item.category}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+        
+              {/* Complaint History */}
+              <h2 style={{ marginTop: "40px" }}>
+                Resolved Complaints
+              </h2>
+        
+              <div style={styles.list}>
+                {resolvedComplaints.map((item) => (
+                  <div key={item._id} style={styles.card}>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                    <p>
+                      <b>Status:</b>{" "}
+                      <span
+                        style={{
+                          color: getStatusColor(item.status),
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item.status}
+                      </span>
+                    </p>
+                    <p>
+                      <b>Remark:</b> {item.remark}
+                    </p>
+                    <small>
+                      {new Date(item.createdAt).toLocaleString()}
+                    </small>
+                  </div>
+                ))}
+              </div>
+            </>
+          );
+        })()}
       </div>
     </>
   );
@@ -188,13 +275,13 @@ const styles = {
   },
 
   list: {
-    width: "700px",
+    width: "38rem",
     margin: "20px auto",
   },
 
   card: {
-    backgroundColor: "#1e293b",
-    border: "2px solid #193cc6",
+    backgroundColor: "#252525",
+    border: "2px solid #393939",
     padding: "20px",
     borderRadius: "10px",
     marginBottom: "15px",
@@ -202,13 +289,14 @@ const styles = {
   },
 
   activeCard: {
-  backgroundColor: "#3b1d1d",
-  border: "2px solid #ef4444",
-  padding: "20px",
-  borderRadius: "10px",
-  textAlign: "left",
-  boxShadow: "0 0 15px rgba(239,68,68,0.25)",
-},
+    width: "35.5rem",
+    margin: "20px auto",
+    backgroundColor: "#393939",
+    border: "2px solid #454545",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "left",
+  },
 };
 
 export default StudentDashboard;

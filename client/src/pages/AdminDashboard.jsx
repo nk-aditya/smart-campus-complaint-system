@@ -42,7 +42,13 @@ function AdminDashboard() {
   useEffect(() => {
     fetchComplaints();
     fetchWorkers();
-  }, []);
+
+    const interval = setInterval(() => {
+      fetchComplaints();
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }, []);
 
   const handleAssign = async (complaintId) => {
     const workerId = selectedWorkers[complaintId];
