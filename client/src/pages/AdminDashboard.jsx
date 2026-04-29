@@ -48,7 +48,20 @@ function AdminDashboard() {
               <div>{item.createdBy?.name}</div>
               <div>{item.title}</div>
               <div>{item.category}</div>
-              <div>{item.status}</div>
+              <div style={{
+                fontWeight: "bold", 
+                color:
+                  item.status === "Pending"
+                    ? "orange"
+                    : item.status === "Assigned"
+                    ? "#3b82f6"
+                    : item.status === "In Progress"
+                    ? "#a855f7"
+                    : "#22c55e",
+                  }
+                }
+              >{item.status}
+              </div>
             </div>
           ))}
         </div>
