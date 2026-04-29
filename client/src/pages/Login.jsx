@@ -39,11 +39,11 @@ function Login() {
   return (
     <div style={styles.container}>
       <form style={styles.box} onSubmit={handleLogin}>
-        <h1>Login</h1>
+        <h1 style={styles.heading}>Login</h1>
 
         <input
           type="email"
-          placeholder="Enter Email"
+          placeholder="Enter Your Email ID"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={styles.input}
@@ -52,7 +52,7 @@ function Login() {
 
         <input
           type="password"
-          placeholder="Enter Password"
+          placeholder="Enter Your Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}
@@ -79,21 +79,27 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "10px",
-    width: "350px",
+    width: "22rem",
     display: "flex",
+    alignItems:"center",
+    justifyContent:"center",
     flexDirection: "column",
     gap: "15px"
   },
   input: {
+    width:"15rem",
     padding: "12px",
     fontSize: "16px"
   },
   button: {
-    padding: "12px",
+    padding: "12px 40px",
     background: "#2563eb",
     color: "white",
     border: "none",
     cursor: "pointer"
+  },
+  heading:{
+    color: "#2e2e2e"
   }
 };
 
