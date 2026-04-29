@@ -18,6 +18,7 @@ router.get("/my", auth, getMyComplaints);
 router.get("/all", auth, getAllComplaints);
 router.put("/assign/:id", auth, assignWorker);
 router.put("/status/:id", auth, updateComplaintStatus);
+router.put("/progress/:id", auth, updateComplaintStatus);
 router.get("/worker", auth, getWorkerComplaints);
 router.put("/complete/:id", auth, completeComplaint);
 
