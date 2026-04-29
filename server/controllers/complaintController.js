@@ -129,6 +129,12 @@ const assignWorker = async (req, res) => {
       });
     }
 
+    if (complaint.status === "Resolved") {
+      return res.status(400).json({
+        message: "Resolved complaint cannot be reassigned"
+      });
+    }
+
     const worker = await User.findById(workerId);
 
     if (!worker || worker.role !== "worker") {

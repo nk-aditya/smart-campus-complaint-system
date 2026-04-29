@@ -43,6 +43,34 @@ function AdminDashboard() {
     fetchWorkers();
   }, []);
 
+  const handleAssign = async (complaintId) => {
+    const workerId = selectedWorkers[complaintId];
+  
+    if (!workerId) {
+      alert("Please select worker");
+      return;
+    }
+  
+    try {
+      await axios.put(
+        `http://localhost:5000/api/complaints/assign/${complaintId}`,
+        { workerId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      alert("Worker Assigned Successfully");
+  
+      fetchComplaints();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to assign worker");
+    }
+  };   
+
   return (
     <>
       <Navbar />
@@ -83,6 +111,7 @@ function AdminDashboard() {
               <div>
                 <select
                   style={styles.select}
+                  disabled={item.status === "Resolved"}
                   value={selectedWorkers[item._id] || ""}
                   onFocus={(e) =>
                     (e.target.style.border = "1px solid #2563eb")
@@ -109,9 +138,16 @@ function AdminDashboard() {
 
               {/* Action Column */}
               <div>
-                <button style={styles.btn}>
-                  Assign
-                </button>
+                {item.status === "Resolved" ? (
+                  <span style={styles.donebadge}>Completed</span>
+                ) : (
+                  <button 
+                    style={styles.btn}
+                    onClick={() => handleAssign(item._id)}
+                  >
+                    Assign
+                  </button>
+                )}
               </div>
             </div>
           ))}
@@ -174,6 +210,11 @@ const styles = {
     cursor: "pointer",
     minWidth: "170px",
     transition: "0.3s",
+  },
+  doneBadge: {
+    color: "#22c55e",
+    fontWeight: "bold",
+    fontSize: "16px",
   },
 };
 
